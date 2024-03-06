@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "nodemon --ext js watch",
-    "task1": "node eventEmitterTest.js"
+    "task1": "node eventEmitterTest.js",
+    "task2": "node WithTime.js"
   },
   "homepage": "https://github.com/ekravchenkoepam/node-mentoring-program#readme",
   "keywords": [],
