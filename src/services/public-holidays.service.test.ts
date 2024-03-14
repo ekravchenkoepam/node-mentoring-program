@@ -4,7 +4,7 @@ import {
     getNextPublicHolidays, 
     checkIfTodayIsPublicHoliday 
 } from "./public-holidays.service";
-import { PUBLIC_HOLIDAYS_API_URL } from '../config';
+import { SUPPORTED_COUNTRIES, PUBLIC_HOLIDAYS_API_URL } from '../config';
 import { shortenPublicHoliday } from '../helpers';
 import { PublicHoliday } from '../types';
 
@@ -15,35 +15,44 @@ describe("public-holidays.service", () => {
         let url: string;
     
         beforeEach(() => {
-            year = 2024;
-            country = 'FR';
+            year = new Date().getFullYear();
+            country = SUPPORTED_COUNTRIES[0];
             url = `${PUBLIC_HOLIDAYS_API_URL}/PublicHolidays/${year}/${country}`;
         });
     
         it('returns public holidays when API is successful', async () => {
             const mockData: PublicHoliday[] = [
                 {
-                    date: '2023-01-01',
-                    localName: 'New Year\'s Day',
-                    name: 'New Year\'s Day',
-                    countryCode: 'FR',
-                    fixed: true,
-                    global: true,
-                    counties: null,
-                    launchYear: 1870,
-                    types: ['National holiday']
+                    date: "2024-01-01",
+                    localName: "New Year's Day",
+                    name: "New Year's Day",
+                    countryCode: "GB",
+                    fixed: false,
+                    global: false,
+                    counties: [
+                        "GB-NIR"
+                    ],
+                    launchYear: null,
+                    types: [
+                        "Public"
+                    ]
                 },
                 {
-                    date: '2023-04-10',
-                    localName: 'Constitution Day',
-                    name: 'Constitution\'s Day',
-                    countryCode: 'FR',
-                    fixed: true,
-                    global: true,
-                    counties: null,
-                    launchYear: 1958,
-                    types: ['National holiday']
-                }
+                    date: "2024-01-01",
+                    localName: "New Year's Day",
+                    name: "New Year's Day",
+                    countryCode: "GB",
+                    fixed: false,
+                    global: false,
+                    counties: [
+                        "GB-ENG",
+                        "GB-WLS"
+                    ],
+                    launchYear: null,
+                    types: [
+                        "Public"
+                    ]
+                },
             ];
     
             const axiosGetSpy = jest.spyOn(axios, 'get').mockResolvedValue({ data: mockData });
@@ -67,7 +76,7 @@ describe("public-holidays.service", () => {
         let url: string;
 
         beforeEach(() => {
-            country = 'FR';
+            country = SUPPORTED_COUNTRIES[0];
             url = `${PUBLIC_HOLIDAYS_API_URL}/IsTodayPublicHoliday/${country}`;
         });
 
@@ -97,38 +106,44 @@ describe("public-holidays.service", () => {
         let url: string;
 
         beforeEach(() => {
-            country = 'FR';
+            country = SUPPORTED_COUNTRIES[0];
             url = `${PUBLIC_HOLIDAYS_API_URL}/NextPublicHolidays/${country}`;
         });
 
         it('returns the public holidays when API is successful', async () => {
             const mockData: PublicHoliday[] = [
                 {
-                    date: '2023-01-01',
-                    localName: 'New Year\'s Day',
-                    name: 'New Year\'s Day',
-                    countryCode: 'FR',
-                    fixed: true,
-                    global: true,
-                    counties: null,
-                    launchYear: 1870,
-                    types: ['National holiday']
+                    date: "2024-03-17",
+                    localName: "Saint Patrick's Day",
+                    name: "Saint Patrick's Day",
+                    countryCode: "GB",
+                    fixed: false,
+                    global: false,
+                    counties: [
+                        "GB-NIR"
+                    ],
+                    launchYear: null,
+                    types: [
+                        "Public"
+                    ]
                 },
                 {
-                    date: '2023-04-10',
-                    localName: 'Constitution Day',
-                    name: 'Constitution\'s Day',
-                    countryCode: 'FR',
-                    fixed: true,
+                    date: "2024-03-29",
+                    localName: "Good Friday",
+                    name: "Good Friday",
+                    countryCode: "GB",
+                    fixed: false,
                     global: true,
                     counties: null,
-                    launchYear: 1958,
-                    types: ['National holiday']
-                }
+                    launchYear: null,
+                    types: [
+                        "Public"
+                    ]
+                },
             ];
     
             const axiosGetSpy = jest.spyOn(axios, 'get').mockResolvedValue({ data: mockData });
-            const publicHolidays = await getNextPublicHolidays('FR');
+            const publicHolidays = await getNextPublicHolidays(country);
     
             expect(publicHolidays).toEqual(mockData.map(shortenPublicHoliday));
             expect(axiosGetSpy).toHaveBeenCalledWith(url);
@@ -136,7 +151,7 @@ describe("public-holidays.service", () => {
     
         it('returns an empty array when API returns an error', async () => {
             const axiosGetSpy = jest.spyOn(axios, 'get').mockImplementation(() => Promise.reject(new Error('Mocked error')));
-            const publicHolidays = await getNextPublicHolidays('FR');
+            const publicHolidays = await getNextPublicHolidays(country);
     
             expect(publicHolidays).toEqual([]);
             expect(axiosGetSpy).toHaveBeenCalledWith(url);
