@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "Node.js Global Mentoring Program [2024 Q1-Q2 UA]",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "nodemon --ext js watch",
+    "test": "jest",
+    "test:e2e": "jest --config jest.e2e.config.js",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
     "task1": "node eventEmitterTest.js",
     "task2": "node WithTime.js",
     "task3": "node csvtojson.js"
@@ -15,9 +18,19 @@
   "author": "Yevhen Kravchenko",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.25",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.3",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
   },
   "dependencies": {
-    "csvtojson": "^2.0.10"
+    "axios": "^1.6.7",
+     "csvtojson": "^2.0.10",
+    "nodemon": "^3.0.3"
   }
 }
