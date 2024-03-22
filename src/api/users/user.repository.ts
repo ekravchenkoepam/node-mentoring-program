@@ -43,13 +43,13 @@ export const userRepository = {
         return user.hobbies;
     },
 
-    updateUserHobby: (id: string, newHobby: string): string[] => {
+    updateUserHobby: (id: string, newHobby: string): UserExtended => {
         const user = userRepository.getOneById(id);
         const index = users.findIndex(user => user.id === id);
 
         user.hobbies = [...new Set([...user.hobbies, newHobby])];
         users[index] = user;
 
-        return user.hobbies;
+        return user;
     }
 };

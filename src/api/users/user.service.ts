@@ -11,11 +11,24 @@ const sendJSONResponse = (res: ServerResponse, statusCode: number, data: any) =>
 const createUser = async (req: IncomingMessage, res: ServerResponse, userId?: string) => {
     try {
         const body = await parseRequestBody(req);
-        const newUser = userRepository.create(body);
+        const user = userRepository.create(body);
+        const response = {
+            data: {
+                user,
+                links: {
+                    self: `/api/users/${user.id}`,
+                    hobbies: `/api/users/${user.id}/hobbies`
+                }
+            },
+            error: null
+        }
 
-        sendJSONResponse(res, 201, newUser);
+        sendJSONResponse(res, 201, response);
     } catch (error) {
-        sendJSONResponse(res, 500, { error: 'Failed to create user' });
+        sendJSONResponse(res, 500, { 
+            data: null,
+            error: 'Failed to create user'
+        });
     }
 }
 
@@ -25,24 +38,41 @@ const getAllUsers = (req: IncomingMessage, res: ServerResponse, userId?: string)
         users = users.map(user => ({
             ...user,
             links: {
+                self: `/api/users/${user.id}`,
                 hobbies: `/api/users/${user.id}/hobbies`
             }
         }));
+        const response = {
+            data: users,
+            error: null
+        }
 
         res.setHeader('Cache-Control', 'public, max-age=3600');
-        sendJSONResponse(res, 200, users);
+        sendJSONResponse(res, 200, response);
     } catch (error) {
-        sendJSONResponse(res, 500, { error: 'Failed to retrieve users' });
+        sendJSONResponse(res, 500, { 
+            data: null,
+            error: 'Failed to retrieve users'
+        });
     }
 }
 
 const deleteUserById = (req: IncomingMessage, res: ServerResponse, userId: string) => {
     try {
-        const deletedUser = userRepository.delete(userId);
+        userRepository.delete(userId);
+        const response = {
+            data: {
+                success: true
+            },
+            error: null
+        }
 
-        sendJSONResponse(res, 200, deletedUser);
+        sendJSONResponse(res, 200, response);
     } catch (e) {
-        sendJSONResponse(res, 404, { error: 'User not found' });
+        sendJSONResponse(res, 404, { 
+            data: null,
+            error: `User with id ${userId} doesn't exist`
+        });
     }
 }
 
@@ -50,27 +80,47 @@ const getUserHobbies = (req: IncomingMessage, res: ServerResponse, userId: strin
     try {
         const hobbies = userRepository.getUserHobbies(userId);
         const response = {
-            hobbies,
-            links: {
-                self: `/api/users/${userId}`
-            }
+            data: {
+                hobbies,
+                links: {
+                    self: `/api/users/${userId}/hobbies`,
+                    user: `/api/users/${userId}`
+                }
+            },
+            error: null
         }
 
         res.setHeader('Cache-Control', 'private, max-age=3600');
         sendJSONResponse(res, 200, response);
     } catch (e) {
-        sendJSONResponse(res, 404, { error: 'User not found' });
+        sendJSONResponse(res, 404, { 
+            data: null,
+            error: `User with id ${userId} doesn't exist`
+        });
     }
 }
 
 const updateUserHobby = async (req: IncomingMessage, res: ServerResponse, userId: string) => {
     try {
         const body = await parseRequestBody(req);
-        const updatedHobbies = userRepository.updateUserHobby(userId, body.hobby);
+        const user = userRepository.updateUserHobby(userId, body.hobby);
+        const response = {
+            data: {
+                user,
+                links: {
+                    self: `/api/users/${userId}`,
+                    hobbies: `/api/users/${userId}/hobbies`
+                }
+            },
+            error: null
+        }
 
-        sendJSONResponse(res, 200, updatedHobbies);
+        sendJSONResponse(res, 200, response);
     } catch (e) {
-        sendJSONResponse(res, 404, { error: 'User not found' });
+        sendJSONResponse(res, 404, { 
+            data: null,
+            error: `User with id ${userId} doesn't exist`
+        });
     }
 }
 
