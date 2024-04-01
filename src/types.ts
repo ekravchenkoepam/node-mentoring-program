@@ -1,3 +1,5 @@
+import { type } from "os";
+
 export type PublicHoliday = {
     date: string;
     localName: string;
@@ -18,3 +20,18 @@ export type LongWeekend = {
     dayCount: number;
     needBridgeDay: boolean;
 };
+
+export type User = {
+    name: string;
+    surname: string;
+    email: string;
+}
+
+export type UserExtended = User & {
+    id: string;
+    hobbies: string[];
+}
+
+export type Body = User & {
+    hobby: string
+}
