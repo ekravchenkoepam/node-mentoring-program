@@ -6,10 +6,11 @@ let users = usersDb;
 
 export const userRepository = {
     create: (user: User): UserExtended => {
+        const { id, ...restUser } = user;
         const newUser = { 
             id: uuidv4(),
             hobbies: [],
-            ...user 
+            ...restUser 
         };
         users.push(newUser);
 

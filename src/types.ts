@@ -1,4 +1,4 @@
-import { type } from "os";
+import { Request } from "express";
 
 export type PublicHoliday = {
     date: string;
@@ -22,6 +22,7 @@ export type LongWeekend = {
 };
 
 export type User = {
+    id: string;
     name: string;
     surname: string;
     email: string;
@@ -34,4 +35,54 @@ export type UserExtended = User & {
 
 export type Body = User & {
     hobby: string
+}
+
+export type Product = {
+    id: string;
+    title: string;
+    description: string;
+    price: number;
+}
+
+export type Cart = {
+    id?: string;
+    userId: string | null;
+    isDeleted: boolean;
+    items: CartItem[];
+}
+
+export type CartItem = {
+    product: Product;
+    count: number
+}
+
+type PaymentInfo = {
+    type: string;
+    address?: string;
+    creditCard?: string;
+};
+
+type DeliveryInfo = {
+    type: string;
+    address: string;
+};
+
+type OrderStatus = 'created' | 'completed';
+
+export type Order = {
+    id: string;
+    userId: string;
+    cartId: string;
+    items: CartItem[];
+    payment: PaymentInfo;
+    delivery: DeliveryInfo;
+    comments: string;
+    status: OrderStatus;
+    total: number;
+};
+
+export interface RequestCustom extends Request {
+    user?: UserExtended;
+    productId?: string;
+    count?: number;
 }

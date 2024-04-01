@@ -1,36 +1,12 @@
-import { IncomingMessage, ServerResponse } from "http";
-import { parse, UrlWithStringQuery } from 'url';
-import * as userService from "./user.service";
+import express from 'express';
+import * as userController from "./user.controller";
 
-const invalidRoute = (res: ServerResponse) => {
-    res.writeHead(404);
-    res.end('Invalid route');
-};
+const router = express.Router();
 
-export const router = (req: IncomingMessage, res: ServerResponse) => {
-    if (!req.url) return invalidRoute(res);
+router.get('/', userController.getAllUsers);
+router.post('/', userController.createUser);
+router.delete('/:userId', userController.deleteUserById);
+router.get('/:userId/hobbies', userController.getUserHobbies);
+router.patch('/:userId/hobbies', userController.updateUserHobby);
 
-    const { pathname }: UrlWithStringQuery = parse(req.url);
-
-    if (pathname) {
-        const userId = pathname.split('/')[3]
-
-        const routes = [
-            { pattern: '^/api/users/?$', method: 'GET', service: userService.getAllUsers },
-            { pattern: '^/api/users/?$', method: 'POST', service: userService.createUser },
-            { pattern: '^/api/users/[^/]+/?$', method: 'DELETE', service: userService.deleteUserById },
-            { pattern: '^/api/users/[^/]+/hobbies/?$', method: 'GET', service: userService.getUserHobbies },
-            { pattern: '^/api/users/[^/]+/hobbies/?$', method: 'PATCH', service: userService.updateUserHobby }
-        ]
-
-        for (const route of routes) {
-            const regexp = new RegExp(route.pattern);
-    
-            if (req.method === route.method && regexp.test(pathname)) {
-                return route.service(req, res, userId);
-            }
-        }
-    }
-    
-    return invalidRoute(res);
-}
+export default router;
