@@ -8,8 +8,6 @@ export const orderService = {
         const cart = await cartRepository.getCart(clientId);
 
         if (cart) {
-            console.log({ items: cart.items });
-
             const {
                 _id: cartId,
                 userId,
@@ -36,8 +34,6 @@ export const orderService = {
     
             const order = (await orderRepository.createOrder(newOrder as Order)).populate('items.product');
 
-            console.log({ order });
-    
             return order;
         }
     }
