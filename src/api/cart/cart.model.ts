@@ -2,11 +2,6 @@ import { Schema, model } from 'mongoose';
 import { Cart } from '../../types';
 
 const cartSchema = new Schema<Cart>({
-    id: {
-        type: String,
-        required: false,
-        unique: true
-    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -14,7 +9,8 @@ const cartSchema = new Schema<Cart>({
     },
     isDeleted: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     },
     items: [{
         product: {
@@ -29,6 +25,6 @@ const cartSchema = new Schema<Cart>({
     }]
 });
 
-const Cart = model<Cart>('Cart', cartSchema);
+const CartModel = model<Cart>('Cart', cartSchema);
 
-export default Cart;
+export default CartModel;

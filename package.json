@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm run build && pm2 start dist/server.js --name ngmp-network-app --watch -f && pm2 logs",
     "stop": "./node_modules/.bin/pm2 stop ngmp-network-app && pm2 delete ngmp-network-app",
+    "restart": "npm run stop && npm run start",
     "build": "tsc",
     "test": "jest",
     "test:e2e": "jest --config jest.e2e.config.js",

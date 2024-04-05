@@ -1,15 +1,13 @@
 import { Product } from "../../types";
-import productsDb from "./productsDB";
-
-const products = productsDb;
+import ProductModel from "./product.model";
 
 export const productRepository = {
-    getAll: (): Product[] => {
-        return products;
+    getAll: async (): Promise<Product[]> => {
+        return await ProductModel.find()
     },
 
-    getOneById: (id: string): Product => {
-        const product = products.find((product) => product.id === id);
+    getOneById: async (id: string): Promise<Product> => {
+        const product = await ProductModel.findById(id)
 
         if (!product) {
             throw new Error(`Product with id: ${id} is not found`);

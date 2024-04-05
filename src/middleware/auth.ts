@@ -1,16 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserExtended } from '../types';
-import usersDb from '../api/users/usersDB';
-
-const users = usersDb;
-
+import { userRepository } from '../api/users/user.repository';
 interface RequestCustom extends Request {
     user?: UserExtended;
 }
 
-export const authenticateUser = (req: RequestCustom, res: Response, next: NextFunction) => {
+export const authenticateUser = async (req: RequestCustom, res: Response, next: NextFunction) => {
     const userId = req.headers['x-user-id'];
-    const user = users.find((user) => user.id === userId);
+    const user = await userRepository.getOneById(userId as string);
 
     if (!userId) {
         return res.status(401).json({

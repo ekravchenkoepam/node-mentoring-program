@@ -1,6 +1,4 @@
-import { Cart } from "../../types";
-
-const cartDb: Cart = {
+const cartDb = {
     userId: null,
     isDeleted: false,
     items: [],

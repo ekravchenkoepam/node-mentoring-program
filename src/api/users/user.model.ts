@@ -2,11 +2,6 @@ import { Schema, model } from 'mongoose';
 import { UserExtended } from '../../types';
 
 const userSchema = new Schema<UserExtended>({
-    id: {
-        type: String,
-        required: true,
-        unique: true
-    },
     name: {
         type: String,
         required: true
@@ -26,6 +21,6 @@ const userSchema = new Schema<UserExtended>({
     }
 });
 
-const User = model<UserExtended>('User', userSchema);
+const UserModel = model<UserExtended>('User', userSchema);
 
-export default User;
+export default UserModel;

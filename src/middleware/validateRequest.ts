@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import Joi, { ObjectSchema } from 'joi';
 
 const schema: ObjectSchema = Joi.object({
+    cartId: Joi.string().required(),
     productId: Joi.string().required(),
     count: Joi.number().required()
 });

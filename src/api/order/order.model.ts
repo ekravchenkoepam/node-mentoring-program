@@ -2,17 +2,13 @@ import { Schema, model } from "mongoose";
 import { Order } from "../../types";
 
 const orderSchema = new Schema<Order>({
-    id: {
-        type: String,
-        required: true,
-        unique: true
-    },
     userId: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true
     },
     cartId: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Cart',
         required: true
     },
     items: [{
@@ -56,6 +52,6 @@ const orderSchema = new Schema<Order>({
     }
 })
 
-const Order = model<Order>('Cart', orderSchema);
+const OrderModel = model<Order>('Order', orderSchema);
 
-export default Order;
+export default OrderModel;

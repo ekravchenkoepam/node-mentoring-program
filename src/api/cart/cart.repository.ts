@@ -1,44 +1,51 @@
-import { v4 as uuidv4 } from 'uuid';
-import cartDb from "./cartDB";
-import { Product } from '../../types';
-
-let cart = cartDb;
+import { Cart, Product } from '../../types';
+import CartModel from './cart.model';
 
 export const cartRepository = {
-    getCart: () => {
+    getCart: async (userId: string): Promise<Cart | null> => {
+        const cart = await CartModel.findOne({ userId }).populate('items.product');
+        
         return cart;
     },
 
-    createCart: (userId: string) => {
-        const newCart = {
-            id: uuidv4(),
-            userId,
-            isDeleted: false,
-            items: []
+    getOrCreateCart: async (userId: string, product?: Product): Promise<Cart> => {
+        let cart = await cartRepository.getCart(userId);
+
+        if (!cart) {
+            const newCart = new CartModel({
+                userId,
+                isDeleted: false,
+                items: [
+                    {
+                        product,
+                        count: 1
+                    }
+                ]
+            });
+
+            cart = await newCart.save();
         }
 
-        cart = newCart;
-
-        return cart;
+        return cart
     },
 
-    updateCart: (product: Product, count: number = 1) => {
-        const index = cart.items.findIndex(item => item.product.id === product.id);
-        const newProduct = {
-            product,
-            count
-        }
+    updateCart: async (cartId: string, productId: string, count: number = 1): Promise<any> => {
+        const updatedCart = await CartModel.findOneAndUpdate(
+            { _id: cartId, "items.product": productId },
+            { $set: { "items.$.count": count } },
+            { new: true }
+        ).populate('items.product').populate('userId')
 
-        if (index !== -1) {
-            cart.items[index].count = count;
-        } else {
-            cart.items.push(newProduct);
-        }
-
-        return cart;
+        return updatedCart;
     },
 
-    removeCart: () => {
-        cart = cartDb;
+    removeCart: async (cartId: string): Promise<Cart | null> => {
+        const updatedCart = await CartModel.findOneAndUpdate(
+            { _id: cartId },
+            { $set: { items: [] } },
+            { new: true }
+        )
+
+        return updatedCart;
     }
 }
