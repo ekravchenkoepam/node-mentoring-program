@@ -2,11 +2,11 @@ import { Product } from "../../types";
 import { productRepository } from "./product.repository";
 
 export const productService = {
-    getAll: (): Product[] => {
-        return productRepository.getAll();
+    getAll: async (): Promise<Product[]> => {
+        return await productRepository.getAll();
     },
 
-    getOneById: (id: string): Product => {
-        return productRepository.getOneById(id);
+    getOneById: async(id: string): Promise<Product> => {
+        return await productRepository.getOneById(id);
     }
 }

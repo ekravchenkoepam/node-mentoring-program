@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { Document, Types } from 'mongoose';
 
 export type PublicHoliday = {
     date: string;
@@ -21,15 +22,14 @@ export type LongWeekend = {
     needBridgeDay: boolean;
 };
 
-export type User = {
-    id: string;
+export type User = Document & {
     name: string;
     surname: string;
     email: string;
 }
 
 export type UserExtended = User & {
-    id: string;
+    _id?: Types.ObjectId;
     hobbies: string[];
 }
 
@@ -37,16 +37,16 @@ export type Body = User & {
     hobby: string
 }
 
-export type Product = {
-    id: string;
+export type Product = Document & {
+    _id?: Types.ObjectId;
     title: string;
     description: string;
     price: number;
 }
 
-export type Cart = {
-    id?: string;
-    userId: string | null;
+export type Cart = Document & {
+    _id?: Types.ObjectId;
+    userId?: Types.ObjectId;
     isDeleted: boolean;
     items: CartItem[];
 }
@@ -69,10 +69,10 @@ type DeliveryInfo = {
 
 type OrderStatus = 'created' | 'completed';
 
-export type Order = {
-    id: string;
-    userId: string;
-    cartId: string;
+export type Order = Document & {
+    _id?: Types.ObjectId;
+    userId: Types.ObjectId;
+    cartId: Types.ObjectId;
     items: CartItem[];
     payment: PaymentInfo;
     delivery: DeliveryInfo;
@@ -83,6 +83,6 @@ export type Order = {
 
 export interface RequestCustom extends Request {
     user?: UserExtended;
-    productId?: string;
+    productId?: Types.ObjectId;
     count?: number;
 }

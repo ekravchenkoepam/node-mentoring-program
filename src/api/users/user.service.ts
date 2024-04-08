@@ -2,34 +2,37 @@ import { userRepository } from './user.repository';
 import { Body } from '../../types';
 
 export const userService = {
-    createUser: (body: Body) => {
-        const user = userRepository.create(body);
+    createUser: async (body: Body) => {
+        const user = await userRepository.create(body);
+
         const data = {
             user,
             links: {
-                self: `/api/users/${user.id}`,
-                hobbies: `/api/users/${user.id}/hobbies`
+                self: `/api/users/${user._id}`,
+                hobbies: `/api/users/${user._id}/hobbies`
             }
         }
     
         return data;
     },
     
-    getAllUsers: () => {
-        const users = userRepository.getAll();
+    getAllUsers: async () => {
+        const users = await userRepository.getAll();
         const data = users.map(user => ({
-            ...user,
+            user: {
+                ...user,
+            },
             links: {
-                self: `/api/users/${user.id}`,
-                hobbies: `/api/users/${user.id}/hobbies`
+                self: `/api/users/${user._id}`,
+                hobbies: `/api/users/${user._id}/hobbies`
             }
         }));
     
         return data;
     },
 
-    deleteUserById: (userId: string) => {
-        const result = userRepository.delete(userId);
+    deleteUserById: async (userId: string) => {
+        const result = await userRepository.delete(userId);
         const data = {
             success: true
         }
@@ -41,8 +44,8 @@ export const userService = {
         return data;
     },
 
-    getUserHobbies: (userId: string) => {
-        const hobbies = userRepository.getUserHobbies(userId);
+    getUserHobbies: async (userId: string) => {
+        const hobbies = await userRepository.getUserHobbies(userId);
         const data = {
             hobbies,
             links: {
@@ -54,8 +57,8 @@ export const userService = {
         return data;
     },
 
-    updateUserHobby: (userId: string, body: Body) => {
-        const user = userRepository.updateUserHobby(userId, body.hobby);
+    updateUserHobby: async (userId: string, hobby: string) => {
+        const user = await userRepository.updateUserHobby(userId, hobby);
         const data = {
             user,
             links: {

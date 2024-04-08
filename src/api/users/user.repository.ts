@@ -1,35 +1,24 @@
 import { User, UserExtended } from '../../types';
-import { v4 as uuidv4 } from 'uuid';
-import usersDb from './usersDB';
-
-let users = usersDb;
+import UserModel from './user.model';
 
 export const userRepository = {
-    create: (user: User): UserExtended => {
-        const { id, ...restUser } = user;
-        const newUser = { 
-            id: uuidv4(),
-            hobbies: [],
-            ...restUser 
-        };
-        users.push(newUser);
+    create: async (user: User): Promise<UserExtended> => {
+        const newUser = new UserModel(user);
+        await newUser.save();
 
         return newUser;
     },
 
-    delete: (id: string): UserExtended => {
-        const user = userRepository.getOneById(id)
-        users = users.filter((u) => u.id !== user.id);
-
-        return user;
+    delete: async (id: string): Promise<UserExtended | null> => {
+        return await UserModel.findByIdAndDelete(id);
     },
 
-    getAll: (): UserExtended[] => {
-        return users;
+    getAll: async (): Promise<UserExtended[]> => {
+        return await UserModel.find().lean();
     },
 
-    getOneById: (id: string): UserExtended => {
-        const user = users.find((user) => user.id === id);
+    getOneById: async (id: string): Promise<UserExtended> => {
+        const user = await UserModel.findById(id)
 
         if (!user) {
             throw new Error(`User with id: ${id} is not found`);
@@ -38,19 +27,18 @@ export const userRepository = {
         return user;
     },
 
-    getUserHobbies: (id: string): string[] => {
-        const user = userRepository.getOneById(id)
+    getUserHobbies: async (id: string): Promise<string[]> => {
+        const user = await userRepository.getOneById(id);
 
         return user.hobbies;
     },
 
-    updateUserHobby: (id: string, newHobby: string): UserExtended => {
-        const user = userRepository.getOneById(id);
-        const index = users.findIndex(user => user.id === id);
+    updateUserHobby: async (id: string, newHobby: string): Promise<UserExtended | null> => {
+        const updatedUser = await UserModel.findByIdAndUpdate(id,
+            { $addToSet: { hobbies: newHobby } },
+            { new: true }
+        );
 
-        user.hobbies = [...new Set([...user.hobbies, newHobby])];
-        users[index] = user;
-
-        return user;
+        return updatedUser;
     }
 };

@@ -4,7 +4,7 @@ import { userService } from './user.service';
 const createUser = async (req: Request, res: Response) => {
     try {
         const body = req.body;
-        const data = userService.createUser(body);
+        const data = await userService.createUser(body);
         const response = {
             data
         };
@@ -18,9 +18,9 @@ const createUser = async (req: Request, res: Response) => {
     }
 };
 
-const getAllUsers = (req: Request, res: Response) => {
+const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const data = userService.getAllUsers();
+        const data = await userService.getAllUsers();
         
         const response = {
             data,
@@ -37,10 +37,10 @@ const getAllUsers = (req: Request, res: Response) => {
     }
 };
 
-const deleteUserById = (req: Request, res: Response) => {
+const deleteUserById = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.userId;
-        const data = userService.deleteUserById(userId);
+        const { userId } = req.params;
+        const data = await userService.deleteUserById(userId);
         const response = {
             data,
             error: null
@@ -55,10 +55,10 @@ const deleteUserById = (req: Request, res: Response) => {
     }
 };
 
-const getUserHobbies = (req: Request, res: Response) => {
+const getUserHobbies = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.userId;
-        const data = userService.getUserHobbies(userId);
+        const { userId } = req.params;
+        const data = await userService.getUserHobbies(userId);
         const response = {
             data,
             error: null
@@ -76,9 +76,10 @@ const getUserHobbies = (req: Request, res: Response) => {
 
 const updateUserHobby = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.userId;
-        const body = req.body;
-        const data = userService.updateUserHobby(userId, body.hobby);
+        const { userId } = req.params;
+        const { hobby } = req.body;
+
+        const data = await userService.updateUserHobby(userId, hobby);
         const response = {
             data,
             error: null

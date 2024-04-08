@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { productService } from './product.service';
 
-const getAllProducts = (req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
     try {
-        const products = productService.getAll();
+        const products = await productService.getAll();
         const response = {
             data: products,
             error: null
@@ -20,9 +20,9 @@ const getAllProducts = (req: Request, res: Response) => {
     }
 };
 
-const getProductById = (req: Request, res: Response) => {
+const getProductById = async (req: Request, res: Response) => {
     try {
-        const product = productService.getOneById(req.params.id);
+        const product = await productService.getOneById(req.params.id);
         const response = {
             data: product,
             error: null
