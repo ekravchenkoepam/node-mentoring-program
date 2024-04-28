@@ -32,7 +32,7 @@ const getAllUsers = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({ 
             data: null,
-            error: 'Failed to retrieve users'
+            error: `Failed to retrieve users, error: ${(error as Error).message}`
         });
     }
 };
@@ -50,7 +50,7 @@ const deleteUserById = async (req: Request, res: Response) => {
     } catch (e) {
         res.status(404).json({ 
             data: null,
-            error: `User with id ${req.params.userId} doesn't exist`
+            error: `User with id ${req.params.userId} doesn't exist. ${(e as Error).message}`
         });
     }
 };

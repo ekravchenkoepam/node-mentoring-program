@@ -1,9 +1,13 @@
 import { cartRepository } from "./cart.repository";
 import { productRepository } from "../product/product.repository";
-import { Cart } from "../../types";
+import { Cart } from "./cart.entity";
 
-export const getTotal = (cart: Cart) => {
-    const total = cart.items.reduce((sum: number, { product, count }) => sum + (product.price * count), 0);
+export const getTotal = (cart: Cart | null) => {
+    if (!cart) {
+        return 0;
+    }
+
+    const total = cart?.items.reduce((sum: number, { product, count }) => sum + (product.price * count), 0);
 
     return total;
 }

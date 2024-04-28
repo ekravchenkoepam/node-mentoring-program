@@ -1,4 +1,4 @@
-import { Product } from "../../types";
+import { Product } from "./product.entity"; 
 import { productRepository } from "./product.repository";
 
 export const productService = {

@@ -1,24 +1,34 @@
-import { User, UserExtended } from '../../types';
-import UserModel from './user.model';
+import { DI } from '../../database';
+import { User } from '../../types';
+import { User as UserEntity } from './user.entity';
+import { Hobby as HobbyEntity } from '../hobby/hobby.entity';
+import { Collection } from '@mikro-orm/core';
+
 
 export const userRepository = {
-    create: async (user: User): Promise<UserExtended> => {
-        const newUser = new UserModel(user);
-        await newUser.save();
-
+    create: async (user: User): Promise<UserEntity> => {
+        const { name, surname, email } = user;
+        const newUser = new UserEntity(
+            name,
+            surname,
+            email
+        );
+        await DI.em.persistAndFlush(newUser);
         return newUser;
     },
 
-    delete: async (id: string): Promise<UserExtended | null> => {
-        return await UserModel.findByIdAndDelete(id);
+    delete: async (id: string): Promise<void> => {
+        const user = await userRepository.getOneById(id);
+        await DI.em.nativeDelete(HobbyEntity, { user });
+        await DI.em.removeAndFlush(user);
     },
 
-    getAll: async (): Promise<UserExtended[]> => {
-        return await UserModel.find().lean();
+    getAll: async (): Promise<UserEntity[]> => {
+        return await DI.users.find({}, { populate: ['hobbies'] })
     },
 
-    getOneById: async (id: string): Promise<UserExtended> => {
-        const user = await UserModel.findById(id)
+    getOneById: async (id: string): Promise<UserEntity> => {
+        const user = await DI.users.findOne(Number(id), { populate: ['hobbies'] })
 
         if (!user) {
             throw new Error(`User with id: ${id} is not found`);
@@ -27,18 +37,25 @@ export const userRepository = {
         return user;
     },
 
-    getUserHobbies: async (id: string): Promise<string[]> => {
+    getUserHobbies: async (id: string): Promise<Collection<HobbyEntity, object>> => {
         const user = await userRepository.getOneById(id);
 
         return user.hobbies;
     },
 
-    updateUserHobby: async (id: string, newHobby: string): Promise<UserExtended | null> => {
-        const updatedUser = await UserModel.findByIdAndUpdate(id,
-            { $addToSet: { hobbies: newHobby } },
-            { new: true }
-        );
+    updateUserHobby: async (id: string, newHobby: string): Promise<UserEntity> => {
+        const user = await userRepository.getOneById(id);
 
-        return updatedUser;
+        if (!user.hobbies.getItems().some(hobby => hobby.name === newHobby)) {
+            const hobby = new HobbyEntity(
+                newHobby,
+                user
+            );
+            user.hobbies.add(hobby);
+    
+            await DI.em.persistAndFlush(user);
+        }
+
+        return user;
     }
 };

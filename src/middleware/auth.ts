@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserExtended } from '../types';
+import { User as UserEntity } from '../api/users/user.entity';
 import { userRepository } from '../api/users/user.repository';
 interface RequestCustom extends Request {
-    user?: UserExtended;
+    user?: UserEntity;
 }
 
 export const authenticateUser = async (req: RequestCustom, res: Response, next: NextFunction) => {
