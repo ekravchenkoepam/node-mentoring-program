@@ -1,19 +1,12 @@
-version: '1'
+version: '3'
 services:
-  mongodb:
-    image: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-  express:
-    build: .
-    ports:
-      - "8000:8000"
-    depends_on:
-      - mongodb
+  postgres-db:
+    image: "postgres:14.11"
+    container_name: "node-mentoring-program"
     environment:
-      MONGODB_URI: mongodb://mongodb:27017/node-mentoring-program
-volumes:
-  mongodb_data:
-    driver: local
+      - POSTGRES_USER=node-mentoring-program
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=node-mentoring-program
+    restart: always
+    ports:
+      - '5432:5432'

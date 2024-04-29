@@ -8,8 +8,8 @@ export const userService = {
         const data = {
             user,
             links: {
-                self: `/api/users/${user._id}`,
-                hobbies: `/api/users/${user._id}/hobbies`
+                self: `/api/users/${user.id}`,
+                hobbies: `/api/users/${user.id}/hobbies`
             }
         }
     
@@ -23,8 +23,8 @@ export const userService = {
                 ...user,
             },
             links: {
-                self: `/api/users/${user._id}`,
-                hobbies: `/api/users/${user._id}/hobbies`
+                self: `/api/users/${user.id}`,
+                hobbies: `/api/users/${user.id}/hobbies`
             }
         }));
     
@@ -32,13 +32,9 @@ export const userService = {
     },
 
     deleteUserById: async (userId: string) => {
-        const result = await userRepository.delete(userId);
+        await userRepository.delete(userId);
         const data = {
             success: true
-        }
-
-        if (!result) {
-            return null;
         }
 
         return data;

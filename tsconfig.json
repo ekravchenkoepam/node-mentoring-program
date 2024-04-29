@@ -9,10 +9,12 @@
         "noImplicitAny": true,
         "esModuleInterop": true,
         "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
     },
     "include": [
         "src/**/*.ts"
-    ],
+, "src/mikro-orm.config.js"    ],
     "exclude": [
         "node_modules"
     ]
