@@ -6,6 +6,11 @@ const getOrCreateCart = async (req: RequestCustom, res: Response) => {
     try {
         const { id: userId } = req.user!;
         const { productId } = req.query;
+
+        if (!userId) {
+            throw new Error("User ID is invalid");
+        }
+
         const data = await cartService.getOrCreateCart(userId, productId as string)
         const response = {
             data,

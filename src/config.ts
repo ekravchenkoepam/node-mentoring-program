@@ -15,3 +15,5 @@ export const DB_PORT = 5432;
 export const DB_USER = 'postgres';
 export const DB_PASSWORD = 'password123';
 export const DB_NAME = APP_NAME;
+
+export const JWT_SECRET = 'jwtSecret';
