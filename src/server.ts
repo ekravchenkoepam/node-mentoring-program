@@ -3,6 +3,7 @@ import 'dotenv/config'
 import { initDatabase } from './database';
 import { RequestContext } from '@mikro-orm/postgresql';
 import { authenticateToken } from './middleware';
+import { gracefulShutdown } from './gracefulShutdown';
 
 import userRouter from './api/users/user.router';
 import productRouter from './api/product/product.router';
@@ -26,7 +27,9 @@ app.use('/api/auth', authRouter);
 initDatabase().then((em) => {
     app.use((req, res, next) => RequestContext.create(em, next));
 
-    app.listen({ port: PORT }, () => {
+    const server = app.listen({ port: PORT }, () => {
         console.log(`Server is running on port ${PORT}`);
     });
+
+    gracefulShutdown(server);
 })
