@@ -3,7 +3,8 @@ import {
     getNextPublicHolidays, 
     checkIfTodayIsPublicHoliday 
 } from "./public-holidays.service";
-import { SUPPORTED_COUNTRIES } from "../config";
+
+const { SUPPORTED_COUNTRIES = [] } = process.env;
 
 describe("public-holidays.service", () => {
     const year = new Date().getFullYear();

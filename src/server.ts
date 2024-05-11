@@ -1,5 +1,5 @@
 import express from 'express'
-import { PORT } from './config';
+import 'dotenv/config'
 import { initDatabase } from './database';
 import { RequestContext } from '@mikro-orm/postgresql';
 import { authenticateToken } from './middleware';
@@ -11,6 +11,7 @@ import orderRouter from './api/order/order.router';
 import authRouter from './api/auth/auth.router';
 
 const app = express();
+const PORT = process.env.PORT ?? 8000;
 
 app.use(express.json());
 

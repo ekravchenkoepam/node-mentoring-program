@@ -1,8 +1,10 @@
 import request from 'supertest';
-import { SUPPORTED_COUNTRIES } from '../../src/config';
 import { PublicHoliday } from '../../src/types';
 
-const API_URL = 'https://date.nager.at/api/v3' // Swagger https://date.nager.at/swagger/index.html
+const {
+    SUPPORTED_COUNTRIES = [],
+    PUBLIC_HOLIDAYS_API_URL = ''
+} = process.env;
 
 type Country = {
     countryCode: string,
@@ -12,7 +14,7 @@ type Country = {
 describe('Date nager API', () => {
     describe('/AvailableCountries', () => {
         test('should return 200 and available countries', async () => {
-            const { status, body } = await request(API_URL).get(`/AvailableCountries`);
+            const { status, body } = await request(PUBLIC_HOLIDAYS_API_URL).get(`/AvailableCountries`);
 
             expect(status).toEqual(200);
             expect(Array.isArray(body)).toBe(true);
@@ -40,7 +42,7 @@ describe('Date nager API', () => {
                 'types',
             ];
 
-            const { status, body } = await request(API_URL).get(`/PublicHolidays/${year}/${countryCode}`);
+            const { status, body } = await request(PUBLIC_HOLIDAYS_API_URL).get(`/PublicHolidays/${year}/${countryCode}`);
 
             expect(status).toEqual(200);
             expect(Array.isArray(body)).toBe(true);

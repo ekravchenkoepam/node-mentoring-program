@@ -1,9 +1,10 @@
-import { SUPPORTED_COUNTRIES } from "./config";
 import { PublicHoliday, PublicHolidayShort } from './types';
 import {
     validateInput,
     shortenPublicHoliday
 } from "./helpers";
+
+const { SUPPORTED_COUNTRIES = [] } = process.env;
 
 describe("helpers", () => {
     describe("validateInput", () => {
