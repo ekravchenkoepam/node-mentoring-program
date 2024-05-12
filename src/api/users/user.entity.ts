@@ -13,21 +13,36 @@ export class User {
     id!: number;
 
     @Property()
-    name!: string;
+    name?: string;
 
     @Property()
-    surname!: string;
+    surname?: string;
 
-    @Property()
+    @Property({ unique: true })
     email!: string;
+
+    @Property()
+    role!: string;
+
+    @Property()
+    password!: string;
 
     @OneToMany(() => Hobby, hobby => hobby.user)
     hobbies = new Collection<Hobby>(this);
 
-    constructor(name: string, surname: string, email: string, hobbies?: Hobby[]) {
+    constructor(
+        email: string,
+        password: string,
+        role: string,
+        name?: string,
+        surname?: string,
+        hobbies?: Hobby[]
+    ) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
         this.name = name;
         this.surname = surname;
-        this.email = email;
 
         if (hobbies) {
             this.hobbies.add(hobbies);

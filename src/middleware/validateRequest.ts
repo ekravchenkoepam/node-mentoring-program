@@ -7,7 +7,13 @@ const schema: ObjectSchema = Joi.object({
     count: Joi.number().required()
 });
 
-export const validateRequestBody = (req: Request, res: Response, next: NextFunction) => {
+const user: ObjectSchema = Joi.object({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+    role: Joi.string().required(),
+});
+
+const createValidator = (schema: ObjectSchema) => (req: Request, res: Response, next: NextFunction) => {
     const { error, value } = schema.validate(req.body);
 
     if (error) {
@@ -23,3 +29,8 @@ export const validateRequestBody = (req: Request, res: Response, next: NextFunct
 
     next();
 };
+
+
+export const validateRequestBody = createValidator(schema);
+
+export const validateUserBody = createValidator(user);

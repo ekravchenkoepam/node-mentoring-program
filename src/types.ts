@@ -22,14 +22,17 @@ export type LongWeekend = {
     needBridgeDay: boolean;
 };
 
-export type User = Document & {
-    name: string;
-    surname: string;
+export type User = {
+    name?: string;
+    surname?: string;
     email: string;
+    password: string;
+    role: string;
+    hobbies?: string[];
 }
 
 export type UserExtended = User & {
-    _id?: Types.ObjectId;
+    id?: string;
     hobbies: string[];
 }
 

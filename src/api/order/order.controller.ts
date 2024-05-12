@@ -5,6 +5,11 @@ import { RequestCustom } from '../../types';
 const createOrder = async (req: RequestCustom, res: Response) => {
     try {
         const { id: userId } = req.user!;
+
+        if (!userId) {
+            throw new Error("User ID is invalid");
+        }
+
         const data = await orderService.createOrder(userId)
         const response = {
             data,

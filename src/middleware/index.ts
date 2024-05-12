@@ -1,2 +1,9 @@
-export { authenticateUser } from './auth'
-export { validateRequestBody } from './validateRequest'
+export {
+    authenticateUser,
+    authorizeAdmin,
+    authenticateToken
+} from './auth'
+export {
+    validateRequestBody,
+    validateUserBody
+} from './validateRequest'

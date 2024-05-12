@@ -4,14 +4,22 @@ import { User as UserEntity } from './user.entity';
 import { Hobby as HobbyEntity } from '../hobby/hobby.entity';
 import { Collection } from '@mikro-orm/core';
 
-
 export const userRepository = {
     create: async (user: User): Promise<UserEntity> => {
-        const { name, surname, email } = user;
-        const newUser = new UserEntity(
+        const {
+            email,
+            password,
+            role,
             name,
             surname,
-            email
+
+        } = user;
+        const newUser = new UserEntity(
+            email,
+            password,
+            role,
+            name,
+            surname,
         );
         await DI.em.persistAndFlush(newUser);
         return newUser;
@@ -32,6 +40,16 @@ export const userRepository = {
 
         if (!user) {
             throw new Error(`User with id: ${id} is not found`);
+        }
+        
+        return user;
+    },
+
+    getUserByEmail: async (email: string): Promise<UserEntity> => {
+        const user = await DI.users.findOne({ email });
+
+        if (!user) {
+            throw new Error(`User matching search conditions is not found`);
         }
         
         return user;
