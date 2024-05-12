@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    container_name: nmp_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: production
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - postgres-db
+  postgres-db:
+    image: "postgres:14.11"
+    container_name: "nmp_postgres"
+    environment:
+      - POSTGRES_USER=node-mentoring-program
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=node-mentoring-program
+    restart: always
+    ports:
+      - '5432:5432'
