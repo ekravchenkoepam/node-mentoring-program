@@ -2,7 +2,10 @@ import express from 'express'
 import 'dotenv/config'
 import { initDatabase } from './database';
 import { RequestContext } from '@mikro-orm/postgresql';
-import { authenticateToken } from './middleware';
+import {
+    authenticateToken,
+    requestLogger
+} from './middleware';
 import { gracefulShutdown } from './gracefulShutdown';
 import { healthCheck } from './healthCheck';
 
@@ -17,7 +20,10 @@ const PORT = process.env.PORT ?? 8000;
 
 app.use(express.json());
 
-app.use(authenticateToken);
+app.use([
+    authenticateToken,
+    requestLogger
+]);
 
 app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
