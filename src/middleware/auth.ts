@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config';
 import { User } from '../api/users/user.entity';
 import { userRepository } from '../api/users/user.repository';
 interface RequestCustom extends Request {
     user?: User;
 }
+
+const { JWT_SECRET = 'jwtSecret' } = process.env;
 
 export const authenticateUser = async (req: RequestCustom, res: Response, next: NextFunction) => {
     const userId = req.headers['x-user-id'];

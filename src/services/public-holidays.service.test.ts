@@ -4,9 +4,10 @@ import {
     getNextPublicHolidays, 
     checkIfTodayIsPublicHoliday 
 } from "./public-holidays.service";
-import { SUPPORTED_COUNTRIES, PUBLIC_HOLIDAYS_API_URL } from '../config';
 import { shortenPublicHoliday } from '../helpers';
 import { PublicHoliday } from '../types';
+
+const { SUPPORTED_COUNTRIES = [], PUBLIC_HOLIDAYS_API_URL } = process.env;
 
 describe("public-holidays.service", () => {
     describe('getListOfPublicHolidays', () => {

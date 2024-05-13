@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { PUBLIC_HOLIDAYS_API_URL } from '../config';
 import { validateInput, shortenPublicHoliday } from '../helpers';
 import { PublicHoliday, PublicHolidayShort } from '../types';
+
+const { PUBLIC_HOLIDAYS_API_URL } = process.env
 
 // Swagger https://date.nager.at/swagger/index.html
 

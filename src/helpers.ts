@@ -1,8 +1,9 @@
-import { SUPPORTED_COUNTRIES } from './config';
 import { PublicHoliday, PublicHolidayShort } from './types';
 
+const { SUPPORTED_COUNTRIES } = process.env;
+
 const validateCountry = (country: string) => {
-    return SUPPORTED_COUNTRIES.includes(country);
+    return SUPPORTED_COUNTRIES?.includes(country);
 };
 
 const validateYear = (year: number) => {

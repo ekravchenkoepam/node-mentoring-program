@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../../config'
 import { userRepository } from '../users/user.repository';
+
+const { JWT_SECRET = 'jwtSecret' } = process.env;
 
 const register = async (req: Request, res: Response) => {
     try {

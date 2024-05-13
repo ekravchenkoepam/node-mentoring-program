@@ -4,7 +4,9 @@
   "description": "Node.js Global Mentoring Program [2024 Q1-Q2 UA]",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && pm2 start dist/server.js --name ngmp-network-app --watch -f && pm2 logs",
+    "start": "NODE_ENV=production dotenv npm run build && pm2 start dist/server.js --name ngmp-network-app --watch -f && pm2 logs",
+    "start:dev": "NODE_ENV=development dotenv npm run build && pm2 start dist/server.js --name ngmp-network-app --watch -f && pm2 logs",
+    "start:test": "NODE_ENV=test dotenv npm run build && pm2 start dist/server.js --name ngmp-network-app --watch -f && pm2 logs",
     "stop": "pm2 stop ngmp-network-app && pm2 delete ngmp-network-app",
     "restart": "npm run stop && npm run start",
     "build": "tsc",
@@ -47,12 +49,14 @@
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "csvtojson": "^2.0.10",
+    "dotenv": "^16.4.5",
     "express": "^4.19.1",
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.4",
     "nodemon": "^3.0.3",
     "pg": "^8.11.5",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "winston": "^3.13.0"
   }
 }
